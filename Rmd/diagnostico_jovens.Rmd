@@ -1,0 +1,1211 @@
+---
+title: "Diagnótito - Juventudes"
+date: "`r format(Sys.time(), '%d de %B, %Y')`"
+subtitle: '**Coordenação de Pesquisa e Avaliação**'
+author: "Fábio Rocha - fabio.vianna@institutounibanco.org.br"
+output:
+  pdf_document:
+    toc: true
+    number_sections: false
+    includes:
+      in_header: header_iu.tex
+header-includes:
+- \renewcommand{\contentsname}{Sumário}
+fontsize: 12pt
+---
+
+\newpage
+# Introdução
+
+Trata-se de um exercício preliminar, a pedido da Gerência de Pesquisa e Inovação, com objetivo de levantar dados que subsídie um diagnóstico das juventudes no Brasil. Para esse fim, foram coletados, incialmente, dados populacionais, educacionais, renda e desemprego - todos dados do IBGE Censo ou PNAD Continua e INEP com enfoque no recorte etário 15 a 29 anos ou ensino médio.^[Esse recorte etário foi definido a partir do que diz o Estatuto da Juventude, Lei 12.852/2013]
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# Bibliotecas
+library(tidyverse)
+library(sidrar)
+library(dplyr)
+library(gt)
+library(glue)
+library(geobr)
+library(sf)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Coleta dos dados
+
+# dados nominais
+censo_n = get_sidra(api="/t/9606/n1/all/n3/all/v/allxp/p/all/c86/95251/c2/allxt/c287/6572,6573,6574,6575,6576,6577,6578,6579,6580,6581,6582,6656,6657,6658,6659")
+
+# selecao de variaveis
+censo_n_selecao = censo_n %>%
+  select("brasil_uf" = `Brasil e Unidade da Federação`,
+         "brasil_uf_code" = `Brasil e Unidade da Federação (Código)`,
+         "sexo" = Sexo, 
+         "idade" = Idade, 
+         "qtd" = Valor,
+         "ano" = Ano)
+
+# subset 1 - apenas brasil
+censo_brasil_jovem = censo_n_selecao %>%
+  filter(brasil_uf == "Brasil")
+
+# subset 2 - apenas jovens
+censo_uf_jovem = censo_n_selecao %>%
+  filter(brasil_uf != "Brasil") 
+
+```
+
+# Dados populacionais dos jovens
+
+## Piramide etária e transição demográfica
+
+O Brasil tem experimentado uma acelerada transição demográfica, e, cada vez mais, a juventude perde espaço na composição populacional. Esse fenômeno redefine a posição dos jovens no sistema produtivo e o alcance das políticas de proteção social e previdenciárias (Menezes e Santos, 2023).
+
+A transição demográfica é um fenômeno que vem sendo observado há algumas décadas por demógrafos e cientistas sociais em particular. Segundo Vasconcelos e Gomes (2012), essa transição é composta por três fases.
+
+>>> Na primeira fase da transição, os níveis de mortalidade caem e os de natalidade mantêm-se elevados; como consequência, o ritmo de crescimento é acelerado e a estrutura etária da população torna-se ainda mais jovem. Na segunda fase da transição, inicia-se a redução dos níveis de natalidade e persiste a queda dos níveis de mortalidadee. As taxas de crescimento da população diminuem, e a estrutura etária começa sua grande transformação: inicia-se o processo de envelhecimento. Observa-se nesta fase, um aumento substantivo da população em idade ativa, reflexo dos níveis de natalidade elevados do passado. Por fim, os baixos níveis de natalidade e mortalidade aproximam-se e observa-se uma estagnação das taxas de crescimento. Diminui o peso da população em idade ativa e nota-se um envelhecimento significativo da estrutura etária.
+
+Essa preocupação e necessidade de analisar a evolução da pirâmide demográfica no tempo se deve em parte porque o crescimento populacional e consequentemente a proporção dessa população em idade ativa explica alguma parcela do crescimento/desenvolvimento econômico de um páis, admitindo que a produtividade da economia não avance em proporções significativas. Isto é, assume-se que a população em idade ativa (15-64) seja responsável por constituir uma parcela da força de trabalho da economia do país. Assim, analisar a evolução da piramide demográfica implicar conhecer os desafios economicos, distributivos e geracionais que formuladores de políticas públicas deverão se debruçar nos próximos anos, quem sabe décadas.
+
+A análise, portanto, de indicadores de educação e trabalho, nesse período adverso, nos permite dialogar com os estudos sobre as transformações da condição juvenil, quer pensando na experiência de moças e rapazes no último decênio, quer pensando nas tendências que sinalizam novas possibilidades de experimentação da juventude.(Menezes e Santos, 2023)
+
+As próximas seções são dedicadas a analisar a evolução da pirâmide com enfoque no recorte etário jovem, isto é, nas pessoas com idade compreendida entre 15 a 29 anos, seguindo a definição proposta pela Lei 12852/2013 (Estatuto do Jovem)
+
+Segundo o Censo 2010 a população jovem 15 a 29 era de 51.340.478, ou seja, 26.9% da população total de 2010. Já em 2022, essa população passou a ser 22.3% da populaçao total brasileira, uma variaçao de 4.6% entre as décadas, sinais claros de que a transformação da piramide etária segue em curso. O gráfico abaixo busca ilustrar essas tranformações. Cumpre notar que a principal variação percentual ocorreu para os jovens com idade de 15 anos, isto é, houve um decrescimento de 21% desse grupo entre 2010 e 2022. 
+
+```{r,echo=FALSE, fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+
+piramide_etaria = censo_brasil_jovem %>%
+  group_by(ano,idade) %>%
+  summarise(qtd = sum(qtd))
+
+ggplot(piramide_etaria, aes(x = idade, y =  qtd)) +
+  geom_bar(stat = "identity", fill = "#6d89f8") +
+  facet_wrap(~ano, ncol = 1) +
+  theme_classic() +
+  theme(legend.position = "right",
+        legend.title = element_blank())+
+ # scale_y_continuous(labels = abs, limits = c(-1, 1) * max(censo_brasil_jovem$qtd)) +
+  labs(title = "Pirâmide etária brasileira (15 - 29 anos)",
+       subtitle = "Censo IBGE",
+       y = "", x = "") +
+   theme(plot.title = element_text(face = "bold", size = 14),
+         plot.subtitle = element_text(face = "italic"),
+         plot.caption = element_text(face = "italic", hjust = 0),
+         axis.text.x = element_blank())+
+   geom_label(aes(label = sprintf("%.1fM", qtd / 1000000)),color = "black", size=2., show.legend = FALSE) +
+   scale_fill_brewer(palette = "Set1") +
+  coord_flip()
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+tabela_piramide_etaria = piramide_etaria %>%
+  pivot_wider(names_from = ano, values_from = qtd) %>%
+  mutate(variacao = ((`2022`-`2010`)/`2010`)*100)
+
+```
+
+Analisando por recortes - 15 a 19, 20 a 24 e 25 a 29 - e sexo, é possivel notar, novamente, a maior variação negativa entre os jovens de 15 a 19 anos para ambos os sexos, mas com uma diferença de quase 2% a mais para mulheres.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+#15 a 29 anos
+jovem_15_29 = get_sidra(api="/t/9606/n1/all/v/allxp/p/all/c86/95251/c2/allxt/c287/93086,93087,93088")
+
+# selecao 
+jovem_15_29_selecao = jovem_15_29 %>%
+  select(ano = Ano, idade = Idade, sexo = Sexo, qtd = Valor)
+
+# Pivota da tabela
+tabela_censo = jovem_15_29_selecao %>%
+  pivot_wider(names_from = "ano", values_from = "qtd") %>%
+  mutate(var = round(((`2022`-`2010`)/`2010`)*100,1))
+
+# tabela
+tabela_censo %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**População de jovens por recorte etário**"),
+             subtitle = glue("2010-2022")) %>%
+  tab_source_note(md("**Dados** Censo IBGE")) %>%
+  cols_label(idade = "Faixa etária",
+             sexo = "Sexo",
+             `2010` = "2010",
+             `2022` = "2022",
+             var = "Variação (%)")
+
+```
+
+## Distribuiçao regional
+
+Em termos de distribuição regional, é um fato que a maior parte dos jovens estão situados no estado de São Paulo, haja vista o tamanho da populaçao deste estado. Chama atenção, porém, a variação negativa no estado da Bahia de 19,4% e positiva em Roraima de 28%. Mais precisamente cinco estados apresentaram variação positiva: Roraima (28%), Acre (4,6%), Amazonas (3,4%), Mato Grosso (1,1%) e Santa Catarina (0,05%). Ao passo que os cinco estados que apresentaram variação negativas são: Bahia (19,4%), Rondônia (17,8%), Rio Grande do Sul (16,3%), Rio de Janeiro (15,6%) e Rio Grande do Norte (15,5%).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+jovem_regiao = get_sidra(api="/t/9606/n3/all/v/allxp/p/all/c86/95251/c2/6794/c287/93086,93087,93088")
+
+jovem_regiao_selecao = jovem_regiao %>%
+  select(ano = Ano, 
+         uf = `Unidade da Federação (Código)`,
+         qtd = Valor) 
+
+jovem_regiao_selecao = jovem_regiao_selecao %>%
+  group_by(uf, ano) %>%
+  summarise(qtd = sum(qtd))
+
+# coleta da geolocalização
+br_map_estado <- read_municipality(code_muni = "all", year = 2020, showProgress = F)
+
+# transformar em caracter
+br_map_estado$code_state = as.character(br_map_estado$code_state)
+
+# Juntar dados de geometria com dados de peso
+br_map <- left_join(br_map_estado, jovem_regiao_selecao, by = c("code_state"="uf"))
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+tabela_jovem_regiao = jovem_regiao_selecao %>%
+  pivot_wider(names_from = ano, values_from = qtd) %>%
+  mutate(variacao = ((`2022`-`2010`)/`2010`)*100)
+
+```
+
+```{r, echo=FALSE, fig.height=8, fig.width=8, warning=FALSE, message=FALSE}
+
+ggplot() +
+  geom_sf(data = br_map, aes(fill = qtd), color = "white") +
+  scale_fill_gradient(low = "#ff9d00", high = "#00a6ff", name = "",
+                      labels = scales::comma_format(scale = 1e-6, suffix = "Mi")) +
+  geom_sf_label(data = br_map, aes(label = round(qtd / 1e6, 1)), 
+                label.padding = unit(0.5, "mm"), size = 3.2) +
+  facet_wrap(~ano)+
+  theme_minimal() +
+  labs(title = "Distribuição da população jovem 15-29 anos",
+       subtitle = "Dados: Censo IBGE ",
+       caption = "Elaboração: Fábio Rocha", x = "", y = "") +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(face = "italic"),
+    plot.caption = element_text(face = "italic", hjust = 0)
+  )
+
+```
+
+```{r, echo=FALSE, fig.height=6, fig.width=8}
+
+ggplot(censo_brasil_jovem, aes(x = idade, y = ifelse(sexo == "Homens", -qtd, qtd), fill = sexo)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ano, ncol = 1) +
+  theme_classic() +
+  theme(legend.position = "right",
+        legend.title = element_blank())+
+  scale_y_continuous(labels = abs, limits = c(-1, 1) * max(censo_brasil_jovem$qtd)) +
+  labs(title = "Pirâmide etária brasileira",
+       subtitle = "Censo IBGE",
+       y = "", x = "") +
+   theme(plot.title = element_text(face = "bold", size = 12),
+         plot.subtitle = element_text(face = "italic"),
+         plot.caption = element_text(face = "italic", hjust = 0),
+         axis.text.x = element_blank())+
+   geom_label(aes(label = sprintf("%.1fM", qtd / 1000000)),color = "white", size=2., show.legend = FALSE) +
+   scale_fill_brewer(palette = "Set1") +
+  coord_flip()
+
+```
+
+## Piramide etária por sexo
+
+Ao observar a evolução da população jovens por cor ou raça é possível notar que a maior variação ocorreu para os jovens que se declaram como amarelos, variação negativa que chegou a 75%. A segunda maior variação negativa foi para o grupo de brancos, 22%. Por outro lado, a maior variaçao positiva foi para o grupo de pessoas indígenas, seguida do grupo de pessoas que se declararam pretas.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Raça
+
+# coleta de dados
+
+jovem_raca = get_sidra(api="/t/9606/n1/all/v/allxp/p/all/c86/allxt/c2/6794/c287/6572,6573,6574,6575,6576,6577,6578,6579,6580,6581,6582,6656,6657,6658,6659")
+
+# selecao das variaveis
+jovem_raca_selecao = jovem_raca %>%
+  select(ano = `Ano`,
+         raca_cor = `Cor ou raça`,
+         idade = Idade,
+         qtd = Valor)
+
+# agrupar por ano e cor
+jovem_raca_selecao = jovem_raca_selecao %>%
+  group_by(ano, raca_cor) %>%
+  summarise(qtd = sum(qtd))
+
+```
+
+```{r, echo=FALSE}
+
+# pivotagem da tabela
+tabela_jovem_raca = jovem_raca_selecao %>%
+  pivot_wider(names_from = ano, values_from = qtd)
+
+# variacao entre o decenio
+
+tabela_jovem_raca = tabela_jovem_raca %>%
+  mutate(var = round(((`2022`-`2010`)/`2010`)*100, 1)) 
+
+# tabela
+tabela_jovem_raca %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**População de jovens por raça ou cor**"),
+             subtitle = glue("2010-2022")) %>%
+  tab_source_note(md("**Dados** Censo IBGE")) %>%
+  cols_label(raca_cor = "Raça ou cor",
+             `2010` = "2010",
+             `2022` = "2022",
+             var = "Variação (%)")
+
+
+```
+
+## Distribuição da população jovem por raça ou cor pelos estados
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# coleta de dado
+jovem_raca_uf = get_sidra(api="/t/9606/n3/all/v/allxp/p/all/c86/allxt/c2/6794/c287/6572,6573,6574,6575,6576,6577,6578,6579,6580,6581,6582,6656,6657,6658,6659")
+
+# selecao de variaveis
+jovem_raca_uf_selecao = jovem_raca_uf %>%
+  select(ano = Ano,
+         uf = `Unidade da Federação`,
+         raca_cor = `Cor ou raça`,
+         idade = Idade, 
+         qtd = Valor)
+
+# agrupar por ano, raça e estado
+jovem_raca_uf_selecao = jovem_raca_uf_selecao %>%
+  group_by(ano, uf, raca_cor) %>%
+  summarise(qtd = sum(qtd))
+
+jovem_raca_uf_selecao = jovem_raca_uf_selecao %>%
+  group_by(ano, uf) %>%
+  mutate(porcentagem = (qtd/sum(qtd))*100)
+
+```
+
+Apenas quatro estados brasileiros (Paraná, Rio Grande do Sul, São Paulo e Santa Catarina) possuem menos de 50% da populaçao negra (pretos pardo e indigenas).Se analisarmos atentamente os quatro estados tiveram uma diminuiçao da populaçao branca e aumento da população parda, sendo que o estado de São Paulo, em 2022, quase atinge 50% de sua população jovem negra (pretos e pardos).
+
+```{r, echo=FALSE, fig.height=5, fig.width=8}
+
+ggplot(jovem_raca_uf_selecao, aes(x=uf, y=porcentagem))+
+  geom_col(aes(fill=raca_cor))+
+  geom_hline(yintercept=50, colour='black', linetype='dashed')+
+  facet_wrap(~ano, ncol = 1) + 
+  theme_classic() +
+  theme(legend.position = 'right',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  labs(x='', y='%',
+     title='Proporção da populaçao jovem por raça ou cor e estado',
+     subtitle = 'Censo IBGE',
+     caption='')
+
+```
+
+# Educação
+
+Com dados da PNAD Continua Anual também foi possível notar uma evolução marginal nos anos médios de educação nos ultimos 6 anos. A maior variação ocorreu para o grupo de jovens do sexo masculino com idade 18 a 29 anos, variação de 6.6%.
+
+No comparativo, mulheres do mesmo recorte etário avançaram 3.5%. Mas note que mulheres em 2016 já possuiam quase que um ano a mais de educação que homens.
+
+Além disso, ao comparar as variações entre os anos 2016-2022 Total por recorte etário e sexo, homens 15 a 17 apresentaram uma variação superior (4.6%) ao mesmo recorte etário Total (3.3%). No recorte etário total 18-29 homens também apresentaram uma variação superior, 6.6% contra 5.4%.
+
+De todo modo, embora a evoluçao seja positiva para jovens do sexo masculino é importante notar que a escolaridade média de jovens do sexo feminino é superior em todos os dois anos, 2016 e 2022, e para ambos recortes etários.
+
+## Anos médios de estudo - homens e mulheres
+
+```{r, echo=FALSE, fig.height=5, fig.width=8, warning=FALSE, message=FALSE}
+
+## Anos medios de estudo por recorte etário e sexo
+# carregamento de dados
+jovens_anos_estudo = get_sidra(api= "/t/7126/n1/all/v/3593/p/all/c2/all/c58/2792,33061/d/v3593%201")
+
+# selecao de variaveis
+jovens_anos_estudo_selecao = jovens_anos_estudo %>%
+  select(ano = Ano,
+         sexo = Sexo,
+         idade = `Grupo de idade`,
+         anos_est = Valor)
+
+# pivotagem dos dados
+jovens_anos_estudo_selecao = jovens_anos_estudo_selecao %>%
+  pivot_wider(names_from = ano, values_from = anos_est) %>%
+  mutate(var = round(((`2022`-`2016`)/`2016`)*100,2))
+
+# tabel
+jovens_anos_estudo_selecao %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Anos medios de estudo por recorte etário e sexo**")) %>%
+  cols_label(sexo = "Total/Sexo",
+             idade = "Faixa etária",
+             `2016` = "2016",
+             `2017` = "2017",
+             `2018` = "2018",
+             `2022` = "2022",
+             var = "Variação 2016-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+
+```
+
+## Anos médios de estudo - cor ou raça
+
+Analisando os mesmos anos médios de estudo considerando o recorte etário e cor ou raça é possivel constatar que a maior variação, 6.6% entre 2016-2022, foi para o grupo de jovens pretos e pardos com 18 a 29 anos. No recorte etário imediatamente anterior, 15 a 17 anos, a variação também foi melhor para pretos e pardos quando comparado a brancos, 3.4% contra 1%.
+
+Entretanto, embora tais evoluções sejam positivas para o grupo de jovens pretos e pardos, é relevante cosntar que a escolaridade média de jovens brancos é aproximadamente um ano a mais que pretos e pardos em ambos anos.
+
+```{r, echo=FALSE, fig.height=5, fig.width=8, warning=FALSE, message=FALSE}
+
+## Anos médio de estudo por raça ou cor
+# coleta do dado
+jovens_anos_estudo_raca = get_sidra(api="/t/7127/n1/all/v/3593/p/all/c86/all/c58/2792,33061/d/v3593%201")
+
+# selecao de variaveis
+jovens_anos_estudo_raca_selecao = jovens_anos_estudo_raca %>%
+  select(ano = Ano,
+         raca_cor = `Cor ou raça`,
+         idade = `Grupo de idade`,
+         anos_est = Valor)
+
+# pivotagem dos dados
+jovens_anos_estudo_raca_selecao = jovens_anos_estudo_raca_selecao %>%
+  pivot_wider(names_from = ano, values_from = anos_est) %>%
+  mutate(var = round(((`2022`-`2016`)/`2016`)*100,2))
+
+```
+
+\newpage
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+jovens_anos_estudo_raca_selecao %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Anos medios de estudo por recorte etário e raça ou cor**")) %>%
+  cols_label(raca_cor = "Total/Raça-cor",
+             idade = "Faixa etária",
+             `2016` = "2016",
+             `2017` = "2017",
+             `2018` = "2018",
+             `2022` = "2022",
+             var = "Variação 2016-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022")) %>%
+  tab_source_note(md("**Nota:** A categoria Total para Cor ou raça inclui as pessoas que se declaram indígenas, amarelas ou sem declaração."))
+
+```
+
+## Matrículas
+
+Em linhas gerais, a quantide de jovens do recorte etário 14 a 24 anos estudando apresentou um queda quando consideramos os três bienios analisados, queda de 7,3%, tanto para o grupo de jovens mais novos quanto para o grupo imediatamente posterior.
+
+As quedas mais acentuadas ocorreram para os grupos 15 a 17 anos na região Sul e Sudeste, seguido pela região nordeste. Por outro lado,a região Norte e Centro-Oeste apresentaram uma melhora de 1.9% e 4.3% respectivamente para o grupo etário 15 a 17 anos, um avanço substantivo.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# carregamento do dado
+estudantes = get_sidra(api="/t/7136/n1/all/n2/all/v/10272/p/all/c2/all/c58/2792,100052")
+
+# selecao 
+estudantes_selecao_total = estudantes %>%
+  select(ano = Ano,
+         idade = `Grupo de idade`,
+         sexo = Sexo,
+         uf = `Brasil e Grande Região`,
+         qtd = Valor) %>%
+  filter(sexo == "Total") %>%
+  select(ano, idade, uf, qtd)
+
+
+# pivotagem 
+estudantes_tabela = estudantes_selecao_total %>%
+  pivot_wider(names_from = ano, values_from = qtd) %>%
+  mutate(var = round(((`2022`-`2016`)/`2016`)*100,2))
+
+# tabela
+estudantes_tabela %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Quantidade de jovens estudando por faixa etária**"),
+             subtitle = ("Mil alunos")) %>%
+  cols_label(idade = "Faixa etária",
+             uf = "Brasil/Região",
+             `2016` = "2016",
+             `2017` = "2017",
+             `2018` = "2018",
+             `2019` = "2019",
+             `2022` = "2022",
+             var = "Variação 2016-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+
+```
+
+## Taxa ajustada de frequência escolar total e por cor ou raça
+
+Taxa ajustada de frequência escolar líquida é a razão entre o número de pessoas que frequenta escola no nível de ensino adequado à sua faixa etária mais aquelas que já concluíram pelo menos esse nível de ensino e o total de pessoas dessa mesma faixa etária.(IBGE)
+
+De forma precisa, essa taxa busca descrever se ocorreram mudanças significativas da frequência escolar de jovens no ensino médio ou no ensino superior. Por se tratar de uma grupo em relação a população de jovens, ela captura adequadamente a evolução da frequencia escolar sem que variações demográficas afetem o indicador.
+
+Menezes e Santos (2023), analisando os microdados da PNAD Continua (2012-2022) verificaram uma melhora de 16.1 p.p e 20.4 p.p para jovens com idade 16 e 17 anos respectivamente, e 17.2 p.p para jovens 18 a 24 anos. Analisando um recorte temporal menor (2016-2022) e para a faixa etária 15-17, é possível identificar uma melhora de 10.2% e 8.2% para o grupo etário 18-24. Essas melhoras, note, foram melhores para os grupos de jovens pretos e pardos, embora a taxa de frequência escolar de pretos e pardos sejam substantivamente inferior a dos brancos.
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# coleta do dado
+taxa_freq = get_sidra(api = "/t/7142/n1/all/v/10282/p/all/c86/all/c871/47818,47819/d/v10282%201")
+
+# selecao
+selecao_taxa_freq = taxa_freq %>%
+  select(ano = Ano,
+         idade = `Faixa etária ideal por curso frequentado`,
+         raca_cor = `Cor ou raça`,
+         qdt = Valor)
+
+# pivotagem
+selecao_taxa_freq = selecao_taxa_freq %>%
+  pivot_wider(names_from = ano, values_from = qdt) %>%
+  mutate(var = round(((`2022`-`2016`)/`2016`)*100,2))
+
+selecao_taxa_freq$idade[selecao_taxa_freq$idade == "15 a 17 anos no ensino médio"] = "15-17 ensino médio"
+selecao_taxa_freq$idade[selecao_taxa_freq$idade == "18 a 24 no ensino superior"] = "18-24 ensino superior"
+
+# tabela
+selecao_taxa_freq %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Taxa ajustada de frequência escolar líquida (%)**"),
+             subtitle = ("")) %>%
+  cols_label(idade = "Faixa etária",
+             raca_cor = "Cor ou raça",
+             `2016` = "2016",
+             `2017` = "2017",
+             `2018` = "2018",
+             `2019` = "2019",
+             `2022` = "2022",
+             var = "Variação 2016-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+
+```
+
+## Jovens que não completaram o ensino médio
+
+**Definicão PNADC:** Pessoas de 14 a 29 anos que não frequentam escola e que frequentaram no máximo o ensino médio ou curso equivalente sem o completar, por sexo e idade que deixou de frequentar escola pela última vez.
+
+Entre 2019 a 2022 ocorreu uma queda substantiva de jovens que deixaram de frequentar/concluir o ensino básico. Essas variações aconteceram principalmente para o grupo etário 14-17 anos para ambos os sexos. Isto é, jovens que deixaram de frequentar a escola pela ultima vez com idade 14 a 17 diminuiu significativamente. Chama atenção, porém, o aumento de jovens com 18 anos que deixaram de frequentar a escola nessa idade sem complentar o ensino.
+
+É provavel que como essa idade marca a *maior idade* - portanto responsabilização de suas próprias ações, inclusive, em boa parte dos casos, a responsabilidade de prover o próprio sustento - essa elevação pode ter evoluido dessa forma em face da conjuntura econômica, política e social experiênciada no período 2019-2022.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# carregamento de dado
+evasao = get_sidra(api="/t/7215/n1/all/n2/all/v/10398/p/all/c2/allxt/c897/48011,48012,48013,48014,48015,48016")
+
+# selecao 
+evasao_selecao = evasao %>%
+  select(uf = `Brasil e Grande Região`,
+         ano = Ano,
+         sexo = Sexo,
+         idade = `Idade que deixou de frequentar escola pela última vez`,
+         qtd = Valor)
+
+# pivotagem
+tabela_selecao_evasao = evasao_selecao %>%
+  pivot_wider(names_from = ano, values_from = qtd) %>%
+  filter(uf == "Brasil") %>%
+  select(sexo, idade, `2019`, `2022`) %>%
+  mutate(var = round(((`2022`-`2019`)/`2019`)*100,1))
+
+# tabela
+tabela_selecao_evasao %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Jovens que não completaram o ensino médio**"),
+             subtitle = "Mil alunos") %>%
+  cols_label(sexo = "Sexo",
+             idade = "Idade",
+             `2019` = "2019",
+             `2022` = "2022",
+             var = "Variação 2019-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2019/2022"))
+
+```
+
+## Ensino Superior
+
+A coniderar o período de turbulências que o Brasil atravessou entre 2016-2022, a queda de estudantes com até 24 anos no ensino superior foi relativamente pequena, embora seja importante notar que 2% de 4,5 milhoes de estudantes são quase 95mil estudantes - aproximadamente o número de alunos da USP. 
+
+Por outro lado, quando se considera o agregado, ocorreu uma elevação 7.1% de estudantes no ensino superior.  
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# carregamento de dado
+ensino_superior = get_sidra(api="/t/7148/n1/all/v/10285/p/all/c58/14434,95253/c875/47847")
+
+# selecao de variavel
+selecao_ensino_sup = ensino_superior %>%
+  select(ano = Ano,
+         idade = `Grupo de idade`,
+         qtd = Valor)
+
+# pivotagem
+tabela_ensino_sup = selecao_ensino_sup %>%
+  pivot_wider(names_from = ano, values_from = qtd) %>%
+  mutate(var = round(((`2022`-`2016`)/`2016`)*100,1))
+
+# tabela
+tabela_ensino_sup %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Estudantes do ensino superior, por grupo de idade**"),
+             subtitle = "Mil alunos") %>%
+  cols_label(idade = "Faixa Etária/Total",
+             `2016` = "2016",
+             `2017` = "2017",
+             `2018` = "2018",
+             `2019` = "2019",
+             `2022` = "2022",
+             var = "Variação 2016-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+```
+
+## Estudantes no ensino médio técnico
+
+Estudantes de 14 anos ou mais de idade no ensino médio (regular ou EJA), por sexo e frequência a curso técnico de nível médio.
+
+Entre 2016 a 2022 ocorreram incrementos positivos de estudantes que cursam ensino técnico de nível médio, precisamente 11.5% - aproximadamente 68 mil estudades, dos quais 30mil são certamente jovens do sexo feminino, como pode ser verificado na tabela abaixo.
+
+Em contrapartida, ocorreu redução do número de jovens que não frequenta ensino técnico de nível médio no mesmo período analisado, aproximadamente 800 mil estudantes. Tanto para homens quanto para mulheres a queda foi semelhante em termos proporcionais.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=8}
+
+# carregamento do dado
+medio_tecnico = get_sidra(api="/t/7165/n1/all/v/10317/p/all/c2/all/c877/allxt")
+
+# selecao de variaveis
+selecao_medio_tecnico = medio_tecnico %>%
+  select(ano = Ano,
+         sexo = Sexo,
+         tecnico = `Frequência a curso técnico de nível médio`,
+         qtd = Valor)
+
+# tratamentos 
+selecao_medio_tecnico$tecnico[selecao_medio_tecnico$tecnico == 
+                                "Frequenta curso técnico de nível médio"] = "Frequenta técnico"
+selecao_medio_tecnico$tecnico[selecao_medio_tecnico$tecnico == 
+                                "Não frequenta curso técnico de nível médio"] = "Não frequenta"
+
+# pivotagem
+tabela_medio_tecnico = selecao_medio_tecnico %>%
+  pivot_wider(names_from = ano, values_from = qtd) %>% 
+  mutate(var = round(((`2022`-`2016`)/`2016`)*100,1))
+
+# exibição de tabela
+tabela_medio_tecnico %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Estudantes no ensino médio técnico ou não**"),
+             subtitle = "Mil alunos") %>%
+  cols_label(sexo = "Sexo",
+             tecnico = "Ensino",
+             `2016` = "2016",
+             `2017` = "2017",
+             `2018` = "2018",
+             `2019` = "2019",
+             `2022` = "2022",
+             var = "Variação 2016-2022 (%)") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+  
+```
+
+## Aprendizagem x abandono (INEP)^[2008/2020 - Dados do Observatório, 2021/2022 - INEP]
+
+Ainda no tocante a educação, particularmente sobre taxa de abandono e aprovaçao, no gráfico abaixo baixo são ilustrados essas ocorrências para 2008-2022, a partir dos indicadores do INEP. O objetivo geral é observar a trajetória da variável no tempo de modo que seja possível verificar sua a variação. 
+
+É nítido que no tocante a aprovação, nos ultimos 14 anos melhoras ocorreram. Pra ser preciso 13.4 p.p de avanço em proporção. Em paralelo, embora não estritatamente comparáveis, a taxa de abandono também apresentou melhoras no perído, uma queda de mais 50% no indicador.
+
+Conforme descrevem Menseses e Santos (2023), o final da série foi marcado não apenas por restrições de inserção ocupacional dos jovens, mas também pela adoção de critérios menos rígidos de controle de frequência e progressão escolar durante a pandemia de Covid-19. É possível que a frequência escolar tenha se tornado uma experiência possível durante o ensino remoto, com ganhos na matrícula formal dos jovens que residem em domicílios vulneráveis.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# carregamento dados
+aprovacao_abandono = read.csv("aprovacao_abandono.csv", sep = ".")
+
+# selecao
+selecao_aprovacao_abandono = aprovacao_abandono %>%
+  select(ano = Ano.de.Ano,
+         tx_abdn = Taxa.de.Abandono,
+         tx_aprv = Taxa.de.Aprovação) %>%
+  unique()
+
+# insercao de dado novo
+selecao_aprovacao_abandono = rbind(selecao_aprovacao_abandono,
+                                   c(ano=2021, 
+                                     tx_abdn=5.8, 
+                                     tx_aprv=89.8))
+selecao_aprovacao_abandono = rbind(selecao_aprovacao_abandono,
+                                   c(ano=2022, 
+                                     tx_abdn=6.6, 
+                                     tx_aprv=85.8))
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# grafico
+ggplot(selecao_aprovacao_abandono, aes(x=(ano)))+
+  geom_line(aes(y=tx_abdn, color="Taxa de abandono"))+
+  geom_line(aes(y=tx_aprv, color = "Taxa de aprovação"))+
+  geom_hline(yintercept=85.8, colour='black', linetype='dashed')+
+  geom_hline(yintercept=6.6, colour='black', linetype='dashed')+
+  geom_text(aes(x = ano, y = tx_abdn, label = tx_abdn), size=2.4) +
+  geom_text(aes(x = ano, y = tx_aprv, label = tx_aprv), size=2.4) +
+  scale_x_discrete(limits = selecao_aprovacao_abandono$ano)+
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold")) + 
+  labs(x='', y='%',
+       title='Rendimento escolar x abandono (Rede estadual)',
+       subtitle = 'Indicadores INEP - Ensino médio',
+       caption='') 
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# coleta do dado
+ideb = idebr::ideb_ensino_medio_brasil
+
+# selecao
+selecao_ideb = ideb %>%
+  select(ano, rede, ideb, nota_media, rendimento) %>%
+ # filter(rede == "Estadual") %>%
+  mutate(ideb_c = round(nota_media*rendimento,2))
+
+# insercao de dados 2021
+selecao_ideb[33,"ideb"] = 4.3
+selecao_ideb[34,"ideb"] = 3.9
+selecao_ideb[35,"ideb"] = 3.9
+selecao_ideb[36,"ideb"] = 5.6
+
+# transformar ano em numero
+selecao_ideb$ano = as.integer(selecao_ideb$ano)
+
+```
+
+## Ideb
+
+Evidentemente que o indice não capta particularidades e toda a realidade da educação. Mas, de todo modo é o melhor que enquanto sociedade desenvolvemos até o momento. Admtindo, pois, que ele consiga medir aproximadamente a aprendizagem dos alunos do ensino médio, o que podemos notar é que existe um hiato entre o ensino médio privado e público no Brasil. Enquanto o indicador registra 3.1 em 2005 para escolas públicas, para escolas particulares marca quase o dobro, 80% maior. Note, porém, que este indicador para escolas privadas permanecer estável no tempo analisado, enquanto que para escolas públicas ele evolui 0.8 p.p entre 2005 a 2021. Além disso, a distancia entre o indicador privado e público que antes era 2,5 pontos do Ideb em 2005, em 2021 caiu para 1.7 pontos.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# gráfico
+ggplot(selecao_ideb, aes(x=ano, y=ideb, fill=rede, color=rede))+
+  geom_line() +
+  geom_hline(yintercept=5.6, colour='green', linetype='dashed')+
+  geom_hline(yintercept=3.9, colour='blue', linetype='dashed')+
+  scale_x_discrete(limits = selecao_ideb$ano)+
+  geom_label(aes(label=round(ideb,1)), color="white", show.legend = F)+
+  theme_bw() +
+  theme(legend.position = 'right',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold")) + 
+  labs(x='', y='',
+       title='Indice de Desenvolvimento da Educação Básica por rede de ensino',
+       subtitle = 'INEP - Ideb (Ensino médio)',
+       caption='') 
+
+```
+
+# Não estuda nem trabalha
+
+## Jovens que não trabalham e não estudam - faixa etária (2016-2022)
+
+Técnicamente a definição proposta pelo IBGE dos jovens que não estudam e não trabalham é a de: **jovens não ocupados e não frequentando escola, nem cursos pré-vestibular, técnico de nível médio ou qualificação profissional**.
+
+No dizer de Menezes e Santos (2023), estudantes que não estudam e não trabalham constumam sofrer consequências negativas de longo prazo nas suas carreiras profissionais. Contudo, esse indicador deve ser interpretado com cautela reconhecendo as baixas espectativas sociais de relização pessoal em face das oportunidades socioeconômicas.
+
+Analisando a evoluaçao da populaçao jovem nessa condiçao no Brasil observa-se uma melhora em todos os recortes etários entre os anos 2016-2022, embora a reduçao do recorte etário 18-29 seja muito menor quando comparado a variação do grupo etário 15-17 anos.
+
+A região norte também apresentou melhora em todos os recortes etários mas de igual forma que o Brasil, variaçoes mais expressivas no recorte etário inicial 15-17 anos.
+
+Quanto a região nordeste chama atenção a proporção de jovens desta região no recorte etário 18 a 29 nesta condição, em todos os anos essa proporção superou 32%.
+
+Na regiões Sul, Sudeste e Centro-Oeste essa variação também reduziu substantivamente em todos os recortes etários no intervalo 2016-2022.
+
+Ou seja, em termos gerais a condição de jovem que não trabalha e estuda é predominante para jovens da região nordeste com idade entre 18 a 29 anos. As duas próximas seções buscam trazer mais informações que auxiliam na caracterização desse jovem, isto é, são fornecidas informações de cor e sexo desse jovem.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# coleta do dado
+nem_nem_percent_2016_2018 = get_sidra(api="/t/7162/n1/all/n2/all/v/10315/p/all/c58/allxt/c876/47891/d/v10315%201")
+nem_nem_percent_2019_2022 = get_sidra(api = "/t/7205/n1/all/n2/all/v/10315/p/all/c58/allxt/c876/47981/d/v10315%201")
+
+# selecao de variaveis 2016-2018
+nem_nem_percent_selecao_2016_2018 = nem_nem_percent_2016_2018 %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         idade = `Grupo de idade`,
+         ano = Ano)
+
+# selecao de variaveis 2019-2022
+nem_nem_percent_selecao_2019_2022 = nem_nem_percent_2019_2022 %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         idade = `Grupo de idade`,
+         ano = Ano)
+
+## Juntar dois dataset
+nem_nem_selecao_2016_2022 = rbind(nem_nem_percent_selecao_2019_2022,nem_nem_percent_selecao_2016_2018)
+
+# pivotagem da tabela
+tabela_nem_nem_idade = nem_nem_selecao_2016_2022 %>%
+  pivot_wider(names_from = uf, values_from = percent)
+
+tabela_nem_nem_idade$ano = as.numeric(tabela_nem_nem_idade$ano)
+
+tabela_nem_nem_idade <- tabela_nem_nem_idade %>%
+  arrange(ano)
+
+tabela_nem_nem_idade %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Jovens nem-nem por faixa etária (%)**")) %>%
+  cols_label(idade = "Faixa etária",
+             ano = "Ano",
+             Brasil = "Brasil",
+             Norte = "Norte",
+             Nordeste = "Nordeste",
+             Sudeste = "Sudeste",
+             Sul = "Sul",
+             `Centro-Oeste` = "Centro-Oeste") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+nem_nem_selecao_2016_2022$ano = as.numeric(nem_nem_selecao_2016_2022$ano)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=8}
+
+ggplot(nem_nem_selecao_2016_2022, aes(x=ano, y=percent, color=idade, group=idade)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=3) +
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold")) + 
+  labs(x='', y='%',
+       title='Jovens nem-nem por faixa etária',
+       subtitle = '(1) PNADC-Anual (IBGE)\n(2) Jovens não ocupados e não frequentando escola, \nnem cursos pré-vestibular, técnico de nível médio ou qualificação profissional (%)',
+       caption='') 
+
+```
+
+## Jovens que não trabalham e não estudam - sexo (2016-2022)
+
+Quanto a proporção de jovens na condição nem-nem, quando se considera o recorte sexo, nitidamente constata-se que essa proporção é maior - entre 10 a 15 p.p - para jovens do sexo feminino em todos os anos, 2016-2022, e todas as regiões. Para piorar, essa proporção reduziu pouco para a região nordeste no periodo analisado, variou de 35.5% em 2016 para 34.1% em 2022. Enquanto que no Brasil essa redução, no mesmo período, foi de 3,2 p.p. A maior reduçao para jovens do sexo femino aconteceu na região Sudeste, saiu de 28.3% e foi para 22.2%.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# coleta do dado
+nem_nem_percent_sexo_2016_2018 = get_sidra(api = "/t/7163/n1/all/n2/all/v/10315/p/all/c2/allxt/c876/47891/d/v10315%201")
+nem_nem_percent_sexo_2019_2022 = get_sidra(api = "/t/7206/n1/all/n2/all/v/10315/p/all/c2/allxt/c876/47981/d/v10315%201")
+
+# selecao de variaveis 2016-2018
+nem_nem_percent_selecao_sexo_2016_2018 = nem_nem_percent_sexo_2016_2018 %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         sexo = Sexo,
+         ano = Ano)
+
+# selecao de variaveis 2019-2022
+nem_nem_percent_selecao_sexo_2019_2022 = nem_nem_percent_sexo_2019_2022 %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         sexo = Sexo,
+         ano = Ano)
+
+
+
+# Juntar dois dataset
+nem_nem_selecao__sexo_2016_2022 = rbind(nem_nem_percent_selecao_sexo_2016_2018,
+                                        nem_nem_percent_selecao_sexo_2019_2022)
+
+# pivotagem da tabela
+tabela_nem_nem_sexo = nem_nem_selecao__sexo_2016_2022 %>%
+  pivot_wider(names_from = uf, values_from = percent)
+
+# transformar ano em numerico
+tabela_nem_nem_sexo$ano = as.numeric(tabela_nem_nem_sexo$ano)
+
+# organizar ano do menor para o maio
+tabela_nem_nem_sexo <- tabela_nem_nem_sexo %>%
+  arrange(ano)
+
+# tabela gt
+tabela_nem_nem_sexo %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Jovens nem-nem por sexo (%)**")) %>%
+  cols_label(sexo = "Sexo",
+             ano = "Ano",
+             Brasil = "Brasil",
+             Norte = "Norte",
+             Nordeste = "Nordeste",
+             Sudeste = "Sudeste",
+             Sul = "Sul",
+             `Centro-Oeste` = "Centro-Oeste") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=8}
+
+ggplot(nem_nem_selecao__sexo_2016_2022, aes(x=ano, y=percent, color=sexo, group=sexo)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=3) +
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold")) + 
+  labs(x='', y='%',
+       title='Jovens nem-nem por sexo',
+       subtitle = '(1) PNADC-Anual (IBGE)\n(2) Jovens não ocupados e não frequentando escola, \nnem cursos pré-vestibular, técnico de nível médio ou qualificação profissional (%)',
+       caption='') 
+
+```
+
+## Jovens que não trabalham e não estudam - cor ou raça (2016-2022)
+
+No geral, a proporção de jovens na condiçao nem-nem do Brasil reduziu entre 2 a 3% para jovens brancos e negros (pretos e pardos) entre 2016-2022 - uma redução, mas pequena. As maiores reduções aconteceram nas regiões sul, sudeste e centro-oeste, particularmente para jovens pretos e pardos.
+
+Note ainda, que a região nordeste apresenta proporções próximas a 30% em todos os anos para jovens pretos e pardos, o que sinaliza evidentes problemas de desigualdade na região, em especial, como já descrito nas seções anteriores, para jovens mulheres com idade entre 18-29 anos de idade.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# - Pessoas de 15 a 29 anos de idade, por cor ou raça e situação de ocupação e condição de estudo
+# coleta do dado
+nem_nem_percent_raca_2016_2018 = get_sidra(api="/t/7164/n1/all/n2/all/v/10315/p/all/c86/allxt/c876/47891/d/v10315%201")
+nem_nem_percent_raca_2019_2022 = get_sidra(api="/t/7207/n1/all/n2/all/v/10315/p/all/c86/allxt/c876/47981/d/v10315%201")
+
+# selecao de variaveis 2016-2018
+nem_nem_percent_selecao_raca_2016_2018 = nem_nem_percent_raca_2016_2018 %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         raca_cor = `Cor ou raça`,
+         ano = Ano)
+
+# selecao de variaveis 2019-2022
+nem_nem_percent_selecao_raca_2019_2022 = nem_nem_percent_raca_2019_2022 %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         raca_cor = `Cor ou raça`,
+         ano = Ano)
+
+# Juntar dois dataset
+nem_nem_selecao_raca_2016_2022 = rbind(nem_nem_percent_selecao_raca_2016_2018,
+                                        nem_nem_percent_selecao_raca_2019_2022)
+
+
+# pivotagem
+tabela_nem_nem_raca_2016_2022 = nem_nem_selecao_raca_2016_2022 %>%
+  pivot_wider(names_from = uf, values_from = percent)
+
+# transformar ano em numerico
+tabela_nem_nem_raca_2016_2022$ano = as.numeric(tabela_nem_nem_raca_2016_2022$ano)
+
+# organizar ano do menor para o maio
+tabela_nem_nem_raca_2016_2022 <- tabela_nem_nem_raca_2016_2022 %>%
+  arrange(ano)
+
+# tabela gt
+tabela_nem_nem_raca_2016_2022 %>%
+  gt(groupname_col = "") %>%
+  tab_header(title = md("**Jovens nem-nem por cor ou raça (%)**")) %>%
+  cols_label(raca_cor = "Cor ou raça",
+             ano = "Ano",
+             Brasil = "Brasil",
+             Norte = "Norte",
+             Nordeste = "Nordeste",
+             Sudeste = "Sudeste",
+             Sul = "Sul",
+             `Centro-Oeste` = "Centro-Oeste") %>%
+  tab_source_note(md("**Dados**: PNADC Anual (IBGE) - 2016/2022"))
+
+```
+
+Menezes e Santos (2023) descrevem que a prevalência do grupo que não estuda e não trabalha entre os jovens negros e do sexo feminino é fruto de baixas perspectivas de inserção ocupacional, ao que se soma a sobrecarga enfrentada pelas mulheres no desempenho dos afazeres domésticos e das atividades de cuidado. Segundo os autores, as diferenças observadas entre homens e mulheres, pelo fato de tais individuos ficarem exluidos do sistema educaciona e sem ocupações remuneradas, de um lado, homens acabam por ficar desempregados e desalentados, enquanto que mulheres assumem o trabalho doméstico não remunerado.
+
+Assim, nos domicílios pobres, a dificuldade de acessar serviços públicos de cuidado, somada à impossibilidade de contratar serviços, explica as desigualdades entre os tipos de composição doméstica. Uma aternartiva, segundo Meneses e Santos (2023) é que haja expansão da oferta de creches públicas possa ser essencial para que as jovens pobres possam estudar e se inserir profissionalmente no mercado de trabalho.
+
+>>> (...) é essencial reconhecer o papel das creches públicas na socialização das atividades de cuidado e, consequentemente, no engajamento feminino em instituições educativas e no mercado de trabalho. (Meneses e Santos, 2023)
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=5, fig.width=8}
+
+ggplot(nem_nem_selecao_raca_2016_2022, aes(x=ano, y=percent, color=raca_cor, group=raca_cor)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=3) +
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold")) + 
+  labs(x='', y='%',
+       title='Jovens por grupo de idade e situação de ocupação e condição de estudo',
+       subtitle = '(1) PNADC-Anual (IBGE)\n(2) Jovens não ocupados e não frequentando escola, \nnem cursos pré-vestibular, técnico de nível médio ou qualificação profissional (%)',
+       caption='') 
+
+```
+
+# Desemprego
+
+## Por faixa etária
+
+Uma coisa é fato, para os jovens que estão em busca de trabalho, o desemprego é maior para aqueles com idade entre 14 a 24 anos quando comparado ao desemprego global, fato observado tanto quando analisamos o Brasil como um todo quanto analisamos por região. 
+
+Mas o desemprego apresenta diferentes magnitudes nas diferentes regiões. Na região Norte, por exemplo, o desemprego entre jovens 14 a 17 e 18 a 24 se comporta relativamente igual e é inferior as demais regiões quando consideramos apenas o recorte 14 a 17 anos.
+
+Note também que o desemprego entre os jovens apresenta um certo descolamento - antes paralelo - do desemprego global no inicio do primeiro trimestre de 2015, período em que o país experiência crise política e econômica que perdura pelos próximos trimestres pelo menos até o final de 2022.
+
+Embora não possamos afirmar categoricamente isso, parece que o desemprego entre jovens é relativamente mais sensivel as variações cíclicas da economia quando comparado a não jovens. Isso pode ser notado pelas inclinações das curvas de desemprego: enquanto a as curvas de desemprego global sofrem pequenas inclinações no tempo, as curvas de desemprego entre jovens se inclinam em maior proporção no mesmo intervalo de tempo.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+# carregamento de dados
+desemprego_jovem = get_sidra(api="/t/6397/n1/all/n2/all/v/4099/p/all/c58/95253,100052,114535/d/v4099%201")
+
+# selecao de variáveis
+desemprego_jovem_selecao_idade = desemprego_jovem %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         idade = `Grupo de idade`,
+         trimestre = `Trimestre (Código)`) 
+
+# tratamento na data
+desemprego_jovem_selecao_idade = desemprego_jovem_selecao_idade %>%
+  mutate(trimestre = ymd(paste0(trimestre, '01'))) %>%
+  mutate(tri = month(trimestre))
+
+desemprego_jovem_selecao_idade$tri = paste0(year(desemprego_jovem_selecao_idade$trimestre), 
+                                                  'Q', desemprego_jovem_selecao_idade$tri)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+ggplot(desemprego_jovem_selecao_idade, aes(x=tri, y=percent, color=idade, group=idade)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=2) +
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"), 
+        axis.text.x = element_text(angle = 50, vjust = 1.3, hjust = 1.3, size=6)) + 
+  labs(x='', y='%',
+       title='Taxa de desocupação por faixa etária (1º trimestre 2012 - 3º trimestre 2023)',
+       subtitle = 'PNADC-Trimestral (IBGE)',
+       caption='')
+
+```
+
+## Cor ou raça^[Os espaços em branco na séries regionais dizem respeito ao período de pandemia - a série foi interrompida por conta do processo de coleta]
+
+Esta seção não trata especificamente do desemprego do jovem, mas do desemprego no Brasil e regiões por cor ou raça, e um primeiro elemento a se destacar é que o desemprego afeta os desiguais de forma desigual. Dito de outro modo, o desemprego afeta brancos, pretos e pardos de forma diferente. De maneira geral, brancos, na série histórica, são menos afetados pelo desemprego e essa discrepancia é maior nas regiões Sudeste e  Sul.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+# carregamento de dados
+desemprego_jovem_raca = get_sidra(api="/t/6402/n1/all/n2/all/v/4099/p/all/c86/all/d/v4099%201")
+
+# selecao de variáveis
+desemprego_jovem_selecao_raca = desemprego_jovem_raca %>%
+  select(uf = `Brasil e Grande Região`,
+         percent = Valor,
+         raca_cor = `Cor ou raça`,
+         trimestre = `Trimestre (Código)`) 
+
+# tratamento na data
+desemprego_jovem_selecao_raca = desemprego_jovem_selecao_raca %>%
+  mutate(trimestre = ymd(paste0(trimestre, '01'))) %>%
+  mutate(tri = month(trimestre))
+
+
+desemprego_jovem_selecao_raca$tri = paste0(year(desemprego_jovem_selecao_raca$trimestre), 
+                                                  'Q', desemprego_jovem_selecao_raca$tri)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+ggplot(desemprego_jovem_selecao_raca, aes(x=tri, y=percent, color=raca_cor, group=raca_cor)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=2) +
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"), 
+        axis.text.x = element_text(angle = 50, 
+                                   vjust = 1.3,
+                                   hjust = 1.3,
+                                   size=6)) + 
+  labs(x='', y='%',
+       title='Taxa de desocupação por cor ou raça',
+       subtitle = 'PNADC-Trimestral (IBGE)',
+       caption='')
+
+```
+
+# Rendimento médio mensal real
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+rendimento = get_sidra(api="/t/5437/n1/all/n2/all/v/5932/p/all/c58/95253,100052,114535")
+
+rendimento_selecao = rendimento %>%
+  select(uf = `Brasil e Grande Região`,
+         tri = `Trimestre (Código)`,
+         idade = `Grupo de idade`,
+         rendimento = Valor)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+# tratamento na data
+rendimento_selecao = rendimento_selecao %>%
+  mutate(trimestre = ymd(paste0(tri, '01'))) %>%
+  mutate(tri = month(trimestre))
+
+
+rendimento_selecao$tri = paste0(year(rendimento_selecao$trimestre), 
+                                                  'Q', rendimento_selecao$tri)
+
+
+```
+
+No que tange o rendimento médio mensal real efetivamente e habitualmente recebido por jovens 14 a 24 anos (14 a 17 e 18 a 24) é possível indetificar poucas variações no período analisado. Com excessao da região Nordeste e Norte, as demais regiões apresentaram rendimento médio real próximo a mil reais para jovens 14 a 17. Para esse mesmo recorte etário, o rendimento médio real no Nordeste é metade das demais regiões. Já para o grupo etário 18-24 anos os maiores rendimentos são para a região Sul, Sudeste e Centro-Oeste, em que tais rendimento variam entre 1500 a 2000 Reais. 
+
+Esse rendimento mais baixo para os jovens, sobretudo o recorte etário 14-17, pode ser explicado em parte por conta da baixa escolaridade e experiência adquirida pelo jovem nessa idade - espera-se que este jovem esteja cursando o ensino médio ou concluindo.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+ggplot(rendimento_selecao, aes(x=tri, y=rendimento, color=idade, group=idade)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=3) +
+  facet_wrap(~uf, ncol=2) +
+  theme_bw() +
+  theme(legend.position = 'top',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"), 
+        axis.text.x = element_text(angle = 50, 
+                                   vjust = 1.3,
+                                   hjust = 1.3,
+                                   size=6)) + 
+  labs(x='', y='R$',
+       title='Rendimento médio mensal real (1º trimestre 2012 - 3º trimestre 2023)',
+       subtitle = 'PNADC-Trimestral (IBGE)',
+       caption='')
+
+```
+
+# Informalidade
+
+No que tange a informalidade, observa-se que o grupo etário 14-17 anos é o mais vulnerável, em particular jovens das regiões Nordeste e Norte, onde a informalidade do grupo etário é superior a 90%. Analisando o grupo etário 18-24, nota-se que a informalidade geral do mercado de trabalho (em azul) quase coincide nas regiões Sul, Sudeste, e Centro-Oeste, além de serem inferiores a 40%.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+informalidade = get_sidra(api="/t/4094/n1/all/n2/all/v/12466/p/all/c58/95253,100052,114535/d/v12466%201")
+
+informalidade_selecao = informalidade %>%
+  select(uf = `Brasil e Grande Região`,
+         tri = `Trimestre (Código)`,
+         idade = `Grupo de idade`,
+         tx_info = Valor)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+# tratamento na data
+informalidade_selecao = informalidade_selecao %>%
+  mutate(trimestre = ymd(paste0(tri, '01'))) %>%
+  mutate(tri = month(trimestre))
+
+
+informalidade_selecao$tri = paste0(year(informalidade_selecao$trimestre), 
+                                                  'Q', informalidade_selecao$tri)
+# remover linhas sem dados
+informalidade_selecao = na.omit(informalidade_selecao)
+
+# remover ultima coluna
+informalidade_selecao = informalidade_selecao[,1:4]
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+ggplot(informalidade_selecao, aes(x=tri, y=tx_info, color=idade, group=idade)) +
+  geom_line(size=1.) +
+  facet_wrap(~uf, ncol=3) +
+  facet_wrap(~uf, ncol=2) +
+  theme_bw() +
+  theme(legend.position = 'right',
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold", size = 12),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"), 
+        axis.text.x = element_text(angle = 50, 
+                                   vjust = 1.3,
+                                   hjust = 1.3,
+                                   size=6)) + 
+  labs(x='', y='%',
+       title='Taxa de informalidade geral e jovens (14-24)',
+       subtitle = 'PNADC-Trimestral (IBGE)',
+       caption='')
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7, fig.width=10}
+
+# proximos links
+#- https://sidra.ibge.gov.br/tabela/7127
+#- https://sidra.ibge.gov.br/tabela/7126
+#- https://sidra.ibge.gov.br/tabela/7125
+#- https://sidra.ibge.gov.br/tabela/7113
+#- https://sidra.ibge.gov.br/pesquisa/pnadca/tabelas#Outras%20formas%20de%20trabalho
+
+```
+
+# Referências
+
+- VASCONCELOS, Ana Maria Nogales; GOMES, Marília Miranda Forte. Transição demográfica: a experiência brasileira. Epidemiol. Serv. Saúde,  Brasília ,  v. 21, n. 4, p. 539-548,  dez.  2012 .   Disponível em <http://scielo.iec.gov.br/scielo.php?script=sci_arttext&pid=S1679-49742012000400003&lng=pt&nrm=iso>. acessos em  05  fev.  2024.  http://dx.doi.org/10.5123/S1679-49742012000400003.
+
+- MENEZES, V. M. O. de; SANTOS, R. S. dos. Juventude, educação e trabalho no Brasil (2012-2022). Tempo Social, [S. l.], v. 35, n. 3, p. 137-160, 2023. DOI: 10.11606/0103-2070.ts.2023.215306. Disponível em: https://www.revistas.usp.br/ts/article/view/215306. Acesso em: 9 fev. 2024.
+
+

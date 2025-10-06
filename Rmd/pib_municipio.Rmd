@@ -1,0 +1,86 @@
+---
+title: "PIB por setor"
+author: "Seu nome"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r}
+
+library(dplyr)
+library(tidyverse)
+library(sidrar)
+
+```
+
+```{r}
+
+pib = get_sidra(api="/t/5938/n6/3547809/v/37,513,517,525,543,6575/p/all/d/v37%200,v513%200,v517%200,v525%200,v543%200,v6575%200") %>%
+  select(ano = Ano,
+         var = Variável,
+         valor = Valor)
+
+unique(pib$var)
+
+```
+
+```{r}
+
+pib$var[pib$var == "Produto Interno Bruto a preços correntes"] = "PIB"
+pib$var[pib$var == "Valor adicionado bruto a preços correntes da agropecuária"] = "Agropecuária"
+pib$var[pib$var == "Valor adicionado bruto a preços correntes da indústria"] = "Industria"
+pib$var[pib$var == "Valor adicionado bruto a preços correntes da administração, defesa, educação e saúde públicas e seguridade social"] = "Serviços (público)"
+pib$var[pib$var == "Impostos, líquidos de subsídios, sobre produtos a preços correntes"] = "Impostos e subsídios"
+pib$var[pib$var == "Valor adicionado bruto a preços correntes dos serviços, exclusive administração, defesa, educação e saúde públicas e seguridade social"] = "Serviços (privado)"
+```
+
+
+```{r, fig.height=5, fig.width=10}
+
+ggplot(pib, aes(x=ano, y=valor/1000000))+
+  geom_col()+
+  facet_wrap(~var, ncol = 3)+
+  theme_bw()+
+   theme(legend.position = 'none',
+        plot.title = ggplot2::element_text(face = "bold", size = 15),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  labs(y="Bilhões (R$)",
+       x="",
+       title = "PIB a preços correntes",
+       subtitle = "2002-2021",
+       caption = "Fonte: IBGE")
+
+```
+
+```{r}
+
+vab_inc_proporcao <- pib %>%
+  select(valor, var, ano) %>%
+  filter(var != "PIB") %>%
+  group_by(ano) %>%
+  mutate(proporcao = valor / sum(valor) * 100)
+
+```
+
+```{r}
+
+ggplot(vab_inc_proporcao, aes(x = as.numeric(ano), y = proporcao)) +
+  geom_area(aes(fill = var)) +
+  theme_classic() +
+  theme(legend.position = "right",
+        legend.title = element_blank(),
+        plot.title = ggplot2::element_text(face = "bold"),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold")) +
+  
+  labs(x = '', 
+       y = "Participação (%)",
+       title = "Participação dos setores na economia de Santo André - SP",
+       subtitle = "Preços correntes - (2001-2021)",
+       caption = "Fonte: IBGE (SIDRA) - Elaboraçao: Fábio Rocha")
+
+```
+
+

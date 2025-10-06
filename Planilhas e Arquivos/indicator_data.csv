@@ -1,0 +1,661 @@
+15 a 17 - Taxa de Mortalidade por Neoplasias 
+Tx Mort Total Neoplasias por Município e Ano
+Período:2018
+"Município";"2018";"Total"
+"350010 Adamantina";185,91;185,91
+"350020 Adolfo";144,13;144,13
+"350030 Aguaí";117,41;117,41
+"350040 Águas da Prata";193,35;193,35
+"350050 Águas de Lindóia";176,18;176,18
+"350055 Águas de Santa Bárbara";170,50;170,50
+"350060 Águas de São Pedro";262,90;262,90
+"350070 Agudos";145,14;145,14
+"350075 Alambari";53,57;53,57
+"350080 Alfredo Marcondes";127,45;127,45
+"350090 Altair";125,19;125,19
+"350100 Altinópolis";122,13;122,13
+"350110 Alto Alegre";173,40;173,40
+"350115 Alumínio";129,60;129,60
+"350120 Álvares Florence";245,03;245,03
+"350130 Álvares Machado";160,24;160,24
+"350140 Álvaro de Carvalho";80,61;80,61
+"350150 Alvinlândia";95,48;95,48
+"350160 Americana";112,96;112,96
+"350170 Américo Brasiliense";79,24;79,24
+"350180 Américo de Campos";191,84;191,84
+"350190 Amparo";187,11;187,11
+"350200 Analândia";105,35;105,35
+"350210 Andradina";155,52;155,52
+"350220 Angatuba";87,36;87,36
+"350230 Anhembi";231,95;231,95
+"350240 Anhumas";25,52;25,52
+"350250 Aparecida";163,06;163,06
+"350260 Aparecida d'Oeste";143,13;143,13
+"350270 Apiaí";101,29;101,29
+"350275 Araçariguama";113,73;113,73
+"350280 Araçatuba";135,00;135,00
+"350290 Araçoiaba da Serra";127,50;127,50
+"350300 Aramina";184,06;184,06
+"350310 Arandu";113,75;113,75
+"350315 Arapeí";0,00;0,00
+"350320 Araraquara";155,09;155,09
+"350330 Araras";153,87;153,87
+"350335 Arco-Íris";272,93;272,93
+"350340 Arealva";196,87;196,87
+"350350 Areias";105,07;105,07
+"350360 Areiópolis";101,97;101,97
+"350370 Ariranha";130,85;130,85
+"350380 Artur Nogueira";52,85;52,85
+"350390 Arujá";124,50;124,50
+"350395 Aspásia";112,74;112,74
+"350400 Assis";113,79;113,79
+"350410 Atibaia";154,62;154,62
+"350420 Auriflama";110,89;110,89
+"350430 Avaí";134,02;134,02
+"350440 Avanhandava";83,69;83,69
+"350450 Avaré";152,30;152,30
+"350460 Bady Bassitt";124,71;124,71
+"350470 Balbinos";216,27;216,27
+"350480 Bálsamo";200,95;200,95
+"350490 Bananal";66,29;66,29
+"350500 Barão de Antonina";120,19;120,19
+"350510 Barbosa";112,01;112,01
+"350520 Bariri";134,17;134,17
+"350530 Barra Bonita";140,12;140,12
+"350535 Barra do Chapéu";54,84;54,84
+"350540 Barra do Turvo";117,25;117,25
+"350550 Barretos";194,92;194,92
+"350560 Barrinha";98,18;98,18
+"350570 Barueri";130,87;130,87
+"350580 Bastos";133,11;133,11
+"350590 Batatais";151,22;151,22
+"350600 Bauru";155,90;155,90
+"350610 Bebedouro";131,77;131,77
+"350620 Bento de Abreu";69,16;69,16
+"350630 Bernardino de Campos";166,98;166,98
+"350635 Bertioga";69,86;69,86
+"350640 Bilac";130,28;130,28
+"350650 Birigui";117,69;117,69
+"350660 Biritiba-Mirim";114,03;114,03
+"350670 Boa Esperança do Sul";138,93;138,93
+"350680 Bocaina";168,24;168,24
+"350690 Bofete";148,29;148,29
+"350700 Boituva";104,26;104,26
+"350710 Bom Jesus dos Perdões";68,38;68,38
+"350715 Bom Sucesso de Itararé";79,01;79,01
+"350720 Borá";0,00;0,00
+"350730 Boracéia";193,05;193,05
+"350740 Borborema";191,00;191,00
+"350745 Borebi";198,10;198,10
+"350750 Botucatu";164,51;164,51
+"350760 Bragança Paulista";149,22;149,22
+"350770 Braúna";55,03;55,03
+"350775 Brejo Alegre";183,02;183,02
+"350780 Brodowski";106,70;106,70
+"350790 Brotas";157,96;157,96
+"350800 Buri";77,21;77,21
+"350810 Buritama";122,12;122,12
+"350820 Buritizal";117,40;117,40
+"350830 Cabrália Paulista";92,74;92,74
+"350840 Cabreúva";94,06;94,06
+"350850 Caçapava";118,81;118,81
+"350860 Cachoeira Paulista";106,83;106,83
+"350870 Caconde";122,43;122,43
+"350880 Cafelândia";140,18;140,18
+"350890 Caiabu";0,00;0,00
+"350900 Caieiras";94,11;94,11
+"350910 Caiuá";91,09;91,09
+"350920 Cajamar";100,12;100,12
+"350925 Cajati";163,22;163,22
+"350930 Cajobi";149,31;149,31
+"350940 Cajuru";91,25;91,25
+"350945 Campina do Monte Alegre";69,41;69,41
+"350950 Campinas";128,48;128,48
+"350960 Campo Limpo Paulista";123,27;123,27
+"350970 Campos do Jordão";110,74;110,74
+"350980 Campos Novos Paulista";147,06;147,06
+"350990 Cananéia";146,47;146,47
+"350995 Canas";60,86;60,86
+"351000 Cândido Mota";116,68;116,68
+"351010 Cândido Rodrigues";112,19;112,19
+"351015 Canitar";61,70;61,70
+"351020 Capão Bonito";103,66;103,66
+"351030 Capela do Alto";115,50;115,50
+"351040 Capivari";90,40;90,40
+"351050 Caraguatatuba";125,43;125,43
+"351060 Carapicuíba";89,74;89,74
+"351070 Cardoso";119,25;119,25
+"351080 Casa Branca";160,76;160,76
+"351090 Cássia dos Coqueiros";238,28;238,28
+"351100 Castilho";138,68;138,68
+"351110 Catanduva";181,22;181,22
+"351120 Catiguá";147,55;147,55
+"351130 Cedral";242,13;242,13
+"351140 Cerqueira César";185,39;185,39
+"351150 Cerquilho";104,07;104,07
+"351160 Cesário Lange";112,09;112,09
+"351170 Charqueada";84,48;84,48
+"355720 Chavantes";163,92;163,92
+"351190 Clementina";173,12;173,12
+"351200 Colina";125,23;125,23
+"351210 Colômbia";99,39;99,39
+"351220 Conchal";111,60;111,60
+"351230 Conchas";170,93;170,93
+"351240 Cordeirópolis";130,63;130,63
+"351250 Coroados";103,41;103,41
+"351260 Coronel Macedo";41,12;41,12
+"351270 Corumbataí";101,39;101,39
+"351280 Cosmópolis";101,69;101,69
+"351290 Cosmorama";127,88;127,88
+"351300 Cotia";112,94;112,94
+"351310 Cravinhos";138,66;138,66
+"351320 Cristais Paulista";120,99;120,99
+"351330 Cruzália";186,57;186,57
+"351340 Cruzeiro";119,67;119,67
+"351350 Cubatão";101,51;101,51
+"351360 Cunha";133,72;133,72
+"351370 Descalvado";155,40;155,40
+"351380 Diadema";113,67;113,67
+"351385 Dirce Reis";116,75;116,75
+"351390 Divinolândia";137,11;137,11
+"351400 Dobrada";80,37;80,37
+"351410 Dois Córregos";120,64;120,64
+"351420 Dolcinópolis";146,27;146,27
+"351430 Dourado";141,08;141,08
+"351440 Dracena";205,84;205,84
+"351450 Duartina";116,37;116,37
+"351460 Dumont";150,20;150,20
+"351470 Echaporã";160,38;160,38
+"351480 Eldorado";92,89;92,89
+"351490 Elias Fausto";111,45;111,45
+"351492 Elisiário";262,54;262,54
+"351495 Embaúba";166,04;166,04
+"351500 Embu das Artes";92,15;92,15
+"351510 Embu-Guaçu";114,94;114,94
+"351512 Emilianópolis";195,89;195,89
+"351515 Engenheiro Coelho";71,33;71,33
+"351518 Espírito Santo do Pinhal";174,28;174,28
+"351519 Espírito Santo do Turvo";106,72;106,72
+"355730 Estiva Gerbi";174,68;174,68
+"351520 Estrela d'Oeste";184,75;184,75
+"351530 Estrela do Norte";225,48;225,48
+"351535 Euclides da Cunha Paulista";147,01;147,01
+"351540 Fartura";186,26;186,26
+"351560 Fernando Prestes";179,63;179,63
+"351550 Fernandópolis";129,01;129,01
+"351565 Fernão";183,94;183,94
+"351570 Ferraz de Vasconcelos";74,99;74,99
+"351580 Flora Rica";247,68;247,68
+"351590 Floreal";208,04;208,04
+"351600 Flórida Paulista";106,13;106,13
+"351610 Florínia";257,16;257,16
+"351620 Franca";127,91;127,91
+"351630 Francisco Morato";66,40;66,40
+"351640 Franco da Rocha";90,46;90,46
+"351650 Gabriel Monteiro";111,44;111,44
+"351660 Gália";90,51;90,51
+"351670 Garça";133,81;133,81
+"351680 Gastão Vidigal";192,97;192,97
+"351685 Gavião Peixoto";43,74;43,74
+"351690 General Salgado";140,67;140,67
+"351700 Getulina";120,07;120,07
+"351710 Glicério";84,85;84,85
+"351720 Guaiçara";102,58;102,58
+"351730 Guaimbê";145,27;145,27
+"351740 Guaíra";149,62;149,62
+"351750 Guapiaçu";88,70;88,70
+"351760 Guapiara";84,55;84,55
+"351770 Guará";96,98;96,98
+"351780 Guaraçaí";178,06;178,06
+"351790 Guaraci";92,76;92,76
+"351800 Guarani d'Oeste";207,04;207,04
+"351810 Guarantã";108,34;108,34
+"351820 Guararapes";157,12;157,12
+"351830 Guararema";163,81;163,81
+"351840 Guaratinguetá";148,49;148,49
+"351850 Guareí";122,49;122,49
+"351860 Guariba";112,14;112,14
+"351870 Guarujá";104,78;104,78
+"351880 Guarulhos";107,94;107,94
+"351885 Guatapará";122,53;122,53
+"351890 Guzolândia";59,55;59,55
+"351900 Herculândia";120,26;120,26
+"351905 Holambra";86,32;86,32
+"351907 Hortolândia";90,73;90,73
+"351910 Iacanga";126,58;126,58
+"351920 Iacri";158,60;158,60
+"351925 Iaras";88,43;88,43
+"351930 Ibaté";91,29;91,29
+"351940 Ibirá";143,57;143,57
+"351950 Ibirarema";122,43;122,43
+"351960 Ibitinga";165,19;165,19
+"351970 Ibiúna";106,11;106,11
+"351980 Icém";151,48;151,48
+"351990 Iepê";101,79;101,79
+"352000 Igaraçu do Tietê";95,93;95,93
+"352010 Igarapava";113,11;113,11
+"352020 Igaratá";119,34;119,34
+"352030 Iguape";139,88;139,88
+"352042 Ilha Comprida";179,44;179,44
+"352044 Ilha Solteira";93,59;93,59
+"352040 Ilhabela";107,78;107,78
+"352050 Indaiatuba";119,93;119,93
+"352060 Indiana";146,29;146,29
+"352070 Indiaporã";233,16;233,16
+"352080 Inúbia Paulista";104,11;104,11
+"352090 Ipaussu";139,54;139,54
+"352100 Iperó";66,28;66,28
+"352110 Ipeúna";138,05;138,05
+"352115 Ipiguá";19,67;19,67
+"352120 Iporanga";136,99;136,99
+"352130 Ipuã";77,29;77,29
+"352140 Iracemápolis";134,89;134,89
+"352150 Irapuã";196,16;196,16
+"352160 Irapuru";121,31;121,31
+"352170 Itaberá";68,03;68,03
+"352180 Itaí";99,99;99,99
+"352190 Itajobi";171,05;171,05
+"352200 Itaju";195,69;195,69
+"352210 Itanhaém";147,31;147,31
+"352215 Itaóca";94,16;94,16
+"352220 Itapecerica da Serra";101,67;101,67
+"352230 Itapetininga";131,87;131,87
+"352240 Itapeva";133,20;133,20
+"352250 Itapevi";72,61;72,61
+"352260 Itapira";164,71;164,71
+"352265 Itapirapuã Paulista";73,01;73,01
+"352270 Itápolis";138,14;138,14
+"352280 Itaporanga";109,19;109,19
+"352290 Itapuí";103,96;103,96
+"352300 Itapura";104,08;104,08
+"352310 Itaquaquecetuba";70,47;70,47
+"352320 Itararé";129,20;129,20
+"352330 Itariri";106,50;106,50
+"352340 Itatiba";137,59;137,59
+"352350 Itatinga";129,79;129,79
+"352360 Itirapina";71,26;71,26
+"352370 Itirapuã";112,83;112,83
+"352380 Itobi";144,81;144,81
+"352390 Itu";126,54;126,54
+"352400 Itupeva";65,74;65,74
+"352410 Ituverava";147,63;147,63
+"352420 Jaborandi";105,04;105,04
+"352430 Jaboticabal";139,63;139,63
+"352440 Jacareí";124,12;124,12
+"352450 Jaci";89,39;89,39
+"352460 Jacupiranga";145,39;145,39
+"352470 Jaguariúna";133,92;133,92
+"352480 Jales";209,66;209,66
+"352490 Jambeiro";148,42;148,42
+"352500 Jandira";61,40;61,40
+"352510 Jardinópolis";114,51;114,51
+"352520 Jarinu";104,74;104,74
+"352530 Jaú";147,52;147,52
+"352540 Jeriquara";95,42;95,42
+"352550 Joanópolis";112,00;112,00
+"352560 João Ramalho";46,13;46,13
+"352570 José Bonifácio";84,87;84,87
+"352580 Júlio Mesquita";108,86;108,86
+"352585 Jumirim";31,14;31,14
+"352590 Jundiaí";165,77;165,77
+"352600 Junqueirópolis";202,04;202,04
+"352610 Juquiá";137,84;137,84
+"352620 Juquitiba";109,85;109,85
+"352630 Lagoinha";103,78;103,78
+"352640 Laranjal Paulista";168,33;168,33
+"352650 Lavínia";105,30;105,30
+"352660 Lavrinhas";42,55;42,55
+"352670 Leme";126,04;126,04
+"352680 Lençóis Paulista";103,98;103,98
+"352690 Limeira";121,71;121,71
+"352700 Lindóia";92,79;92,79
+"352710 Lins";155,83;155,83
+"352720 Lorena";128,15;128,15
+"352725 Lourdes";183,99;183,99
+"352730 Louveira";103,84;103,84
+"352740 Lucélia";120,16;120,16
+"352750 Lucianópolis";44,33;44,33
+"352760 Luís Antônio";58,59;58,59
+"352770 Luiziânia";178,35;178,35
+"352780 Lupércio";158,84;158,84
+"352790 Lutécia";303,38;303,38
+"352800 Macatuba";119,04;119,04
+"352810 Macaubal";180,83;180,83
+"352820 Macedônia";167,08;167,08
+"352830 Magda";192,93;192,93
+"352840 Mairinque";111,52;111,52
+"352850 Mairiporã";91,46;91,46
+"352860 Manduri";169,74;169,74
+"352870 Marabá Paulista";122,32;122,32
+"352880 Maracaí";96,37;96,37
+"352885 Marapoama";105,04;105,04
+"352890 Mariápolis";75,68;75,68
+"352900 Marília";149,50;149,50
+"352910 Marinópolis";238,32;238,32
+"352920 Martinópolis";118,18;118,18
+"352930 Matão";133,41;133,41
+"352940 Mauá";84,97;84,97
+"352950 Mendonça";181,05;181,05
+"352960 Meridiano";159,49;159,49
+"352965 Mesópolis";0,00;0,00
+"352970 Miguelópolis";136,52;136,52
+"352980 Mineiros do Tietê";128,13;128,13
+"353000 Mira Estrela";205,76;205,76
+"352990 Miracatu";115,17;115,17
+"353010 Mirandópolis";123,07;123,07
+"353020 Mirante do Paranapanema";113,42;113,42
+"353030 Mirassol";140,20;140,20
+"353040 Mirassolândia";173,12;173,12
+"353050 Mococa";141,02;141,02
+"353060 Mogi das Cruzes";118,89;118,89
+"353070 Mogi Guaçu";147,06;147,06
+"353080 Moji Mirim";128,15;128,15
+"353090 Mombuca";120,48;120,48
+"353100 Monções";138,31;138,31
+"353110 Mongaguá";156,69;156,69
+"353120 Monte Alegre do Sul";170,11;170,11
+"353130 Monte Alto";139,27;139,27
+"353140 Monte Aprazível";138,04;138,04
+"353150 Monte Azul Paulista";114,54;114,54
+"353160 Monte Castelo";124,97;124,97
+"353180 Monte Mor";113,20;113,20
+"353170 Monteiro Lobato";113,69;113,69
+"353190 Morro Agudo";110,42;110,42
+"353200 Morungaba";115,76;115,76
+"353205 Motuca";109,43;109,43
+"353210 Murutinga do Sul";257,97;257,97
+"353215 Nantes";133,33;133,33
+"353220 Narandiba";253,86;253,86
+"353230 Natividade da Serra";134,53;134,53
+"353240 Nazaré Paulista";160,74;160,74
+"353250 Neves Paulista";127,04;127,04
+"353260 Nhandeara";194,68;194,68
+"353270 Nipoã";61,95;61,95
+"353280 Nova Aliança";189,21;189,21
+"353282 Nova Campina";74,27;74,27
+"353284 Nova Canaã Paulista";203,05;203,05
+"353286 Nova Castilho";171,38;171,38
+"353290 Nova Europa";143,36;143,36
+"353300 Nova Granada";174,94;174,94
+"353310 Nova Guataporanga";137,05;137,05
+"353320 Nova Independência";221,79;221,79
+"353330 Nova Luzitânia";177,85;177,85
+"353340 Nova Odessa";79,27;79,27
+"353325 Novais";112,38;112,38
+"353350 Novo Horizonte";145,44;145,44
+"353360 Nuporanga";194,90;194,90
+"353370 Ocauçu";144,65;144,65
+"353380 Óleo";235,29;235,29
+"353390 Olímpia";151,76;151,76
+"353400 Onda Verde";216,40;216,40
+"353410 Oriente";112,34;112,34
+"353420 Orindiúva";120,48;120,48
+"353430 Orlândia";95,69;95,69
+"353440 Osasco";118,92;118,92
+"353450 Oscar Bressane";278,00;278,00
+"353460 Osvaldo Cruz";157,00;157,00
+"353470 Ourinhos";130,22;130,22
+"353480 Ouro Verde";73,40;73,40
+"353475 Ouroeste";189,17;189,17
+"353490 Pacaembu";175,71;175,71
+"353500 Palestina";75,24;75,24
+"353510 Palmares Paulista";111,16;111,16
+"353520 Palmeira d'Oeste";108,66;108,66
+"353530 Palmital";120,80;120,80
+"353540 Panorama";145,91;145,91
+"353550 Paraguaçu Paulista";134,67;134,67
+"353560 Paraibuna";149,50;149,50
+"353570 Paraíso";112,87;112,87
+"353580 Paranapanema";133,22;133,22
+"353590 Paranapuã";232,02;232,02
+"353600 Parapuã";170,31;170,31
+"353610 Pardinho";112,43;112,43
+"353620 Pariquera-Açu";136,17;136,17
+"353625 Parisi";194,93;194,93
+"353630 Patrocínio Paulista";49,39;49,39
+"353640 Paulicéia";157,41;157,41
+"353650 Paulínia";100,08;100,08
+"353657 Paulistânia";225,73;225,73
+"353660 Paulo de Faria";152,44;152,44
+"353670 Pederneiras";100,50;100,50
+"353680 Pedra Bela";118,04;118,04
+"353690 Pedranópolis";122,70;122,70
+"353700 Pedregulho";136,08;136,08
+"353710 Pedreira";100,84;100,84
+"353715 Pedrinhas Paulista";100,10;100,10
+"353720 Pedro de Toledo";92,47;92,47
+"353730 Penápolis";147,44;147,44
+"353740 Pereira Barreto";134,31;134,31
+"353750 Pereiras";194,17;194,17
+"353760 Peruíbe";154,10;154,10
+"353770 Piacatu";103,95;103,95
+"353780 Piedade";105,20;105,20
+"353790 Pilar do Sul";104,07;104,07
+"353800 Pindamonhangaba";126,48;126,48
+"353810 Pindorama";168,23;168,23
+"353820 Pinhalzinho";83,14;83,14
+"353830 Piquerobi";28,30;28,30
+"353850 Piquete";131,21;131,21
+"353860 Piracaia";107,49;107,49
+"353870 Piracicaba";136,31;136,31
+"353880 Piraju";154,00;154,00
+"353890 Pirajuí";150,87;150,87
+"353900 Pirangi";185,32;185,32
+"353910 Pirapora do Bom Jesus";43,99;43,99
+"353920 Pirapozinho";108,58;108,58
+"353930 Pirassununga";142,41;142,41
+"353940 Piratininga";138,60;138,60
+"353950 Pitangueiras";144,99;144,99
+"353960 Planalto";119,26;119,26
+"353970 Platina";145,39;145,39
+"353980 Poá";114,32;114,32
+"353990 Poloni";124,67;124,67
+"354000 Pompéia";137,92;137,92
+"354010 Pongaí";148,46;148,46
+"354020 Pontal";75,53;75,53
+"354025 Pontalinda";90,72;90,72
+"354030 Pontes Gestal";277,34;277,34
+"354040 Populina";247,71;247,71
+"354050 Porangaba";76,74;76,74
+"354060 Porto Feliz";119,26;119,26
+"354070 Porto Ferreira";136,18;136,18
+"354075 Potim";88,09;88,09
+"354080 Potirendaba";152,46;152,46
+"354085 Pracinha";34,49;34,49
+"354090 Pradópolis";118,53;118,53
+"354100 Praia Grande";140,10;140,10
+"354105 Pratânia";59,52;59,52
+"354110 Presidente Alves";148,66;148,66
+"354120 Presidente Bernardes";167,88;167,88
+"354130 Presidente Epitácio";130,41;130,41
+"354140 Presidente Prudente";130,41;130,41
+"354150 Presidente Venceslau";128,95;128,95
+"354160 Promissão";136,34;136,34
+"354165 Quadra";27,65;27,65
+"354170 Quatá";124,00;124,00
+"354180 Queiroz";188,50;188,50
+"354190 Queluz";96,74;96,74
+"354200 Quintana";156,18;156,18
+"354210 Rafard";89,96;89,96
+"354220 Rancharia";152,63;152,63
+"354230 Redenção da Serra";130,17;130,17
+"354240 Regente Feijó";150,27;150,27
+"354250 Reginópolis";138,27;138,27
+"354260 Registro";151,48;151,48
+"354270 Restinga";150,50;150,50
+"354280 Ribeira";30,70;30,70
+"354290 Ribeirão Bonito";140,72;140,72
+"354300 Ribeirão Branco";135,52;135,52
+"354310 Ribeirão Corrente";130,80;130,80
+"354320 Ribeirão do Sul";228,78;228,78
+"354323 Ribeirão dos Índios";232,77;232,77
+"354325 Ribeirão Grande";106,77;106,77
+"354330 Ribeirão Pires";109,40;109,40
+"354340 Ribeirão Preto";140,77;140,77
+"354360 Rifaina";144,51;144,51
+"354370 Rincão";85,91;85,91
+"354380 Rinópolis";112,74;112,74
+"354390 Rio Claro";142,69;142,69
+"354400 Rio das Pedras";104,50;104,50
+"354410 Rio Grande da Serra";106,89;106,89
+"354420 Riolândia";62,19;62,19
+"354350 Riversul";155,74;155,74
+"354425 Rosana";96,84;96,84
+"354430 Roseira";182,01;182,01
+"354440 Rubiácea";65,92;65,92
+"354450 Rubinéia";202,22;202,22
+"354460 Sabino";110,66;110,66
+"354470 Sagres";42,32;42,32
+"354480 Sales";151,46;151,46
+"354490 Sales Oliveira";114,62;114,62
+"354500 Salesópolis";84,39;84,39
+"354510 Salmourão";158,32;158,32
+"354515 Saltinho";168,37;168,37
+"354520 Salto";119,03;119,03
+"354530 Salto de Pirapora";140,45;140,45
+"354540 Salto Grande";199,36;199,36
+"354550 Sandovalina";73,03;73,03
+"354560 Santa Adélia";128,49;128,49
+"354570 Santa Albertina";175,90;175,90
+"354580 Santa Bárbara d'Oeste";129,87;129,87
+"354600 Santa Branca";120,58;120,58
+"354610 Santa Clara d'Oeste";98,81;98,81
+"354620 Santa Cruz da Conceição";116,82;116,82
+"354625 Santa Cruz da Esperança";97,37;97,37
+"354630 Santa Cruz das Palmeiras";121,26;121,26
+"354640 Santa Cruz do Rio Pardo";118,24;118,24
+"354650 Santa Ernestina";216,92;216,92
+"354660 Santa Fé do Sul";173,75;173,75
+"354670 Santa Gertrudes";67,28;67,28
+"354680 Santa Isabel";99,65;99,65
+"354690 Santa Lúcia";82,32;82,32
+"354700 Santa Maria da Serra";166,89;166,89
+"354710 Santa Mercedes";177,68;177,68
+"354740 Santa Rita d'Oeste";164,47;164,47
+"354750 Santa Rita do Passa Quatro";155,26;155,26
+"354760 Santa Rosa de Viterbo";162,29;162,29
+"354765 Santa Salete";138,60;138,60
+"354720 Santana da Ponte Pensa";391,64;391,64
+"354730 Santana de Parnaíba";103,54;103,54
+"354770 Santo Anastácio";128,85;128,85
+"354780 Santo André";154,51;154,51
+"354790 Santo Antônio da Alegria";106,51;106,51
+"354800 Santo Antônio de Posse";151,62;151,62
+"354805 Santo Antônio do Aracanguá";122,93;122,93
+"354810 Santo Antônio do Jardim";136,94;136,94
+"354820 Santo Antônio do Pinhal";121,29;121,29
+"354830 Santo Expedito";136,10;136,10
+"354840 Santópolis do Aguapeí";65,32;65,32
+"354850 Santos";185,87;185,87
+"354860 São Bento do Sapucaí";76,12;76,12
+"354870 São Bernardo do Campo";126,65;126,65
+"354880 São Caetano do Sul";215,25;215,25
+"354890 São Carlos";147,80;147,80
+"354900 São Francisco";185,19;185,19
+"354910 São João da Boa Vista";170,74;170,74
+"354920 São João das Duas Pontes";120,39;120,39
+"354925 São João de Iracema";108,81;108,81
+"354930 São João do Pau d'Alho";199,50;199,50
+"354940 São Joaquim da Barra";137,18;137,18
+"354950 São José da Bela Vista";127,05;127,05
+"354960 São José do Barreiro";147,46;147,46
+"354970 São José do Rio Pardo";181,27;181,27
+"354980 São José do Rio Preto";144,51;144,51
+"354990 São José dos Campos";123,86;123,86
+"354995 São Lourenço da Serra";65,59;65,59
+"355000 São Luís do Paraitinga";132,94;132,94
+"355010 São Manuel";195,80;195,80
+"355020 São Miguel Arcanjo";122,36;122,36
+"355030 São Paulo";134,66;134,66
+"355040 São Pedro";207,56;207,56
+"355050 São Pedro do Turvo";150,09;150,09
+"355060 São Roque";104,84;104,84
+"355070 São Sebastião";102,87;102,87
+"355080 São Sebastião da Grama";158,97;158,97
+"355090 São Simão";128,88;128,88
+"355100 São Vicente";130,67;130,67
+"355110 Sarapuí";80,89;80,89
+"355120 Sarutaiá";27,48;27,48
+"355130 Sebastianópolis do Sul";215,38;215,38
+"355140 Serra Azul";132,56;132,56
+"355160 Serra Negra";201,80;201,80
+"355150 Serrana";94,57;94,57
+"355170 Sertãozinho";106,56;106,56
+"355180 Sete Barras";158,05;158,05
+"355190 Severínia";83,30;83,30
+"355200 Silveiras";49,01;49,01
+"355210 Socorro";213,50;213,50
+"355220 Sorocaba";136,10;136,10
+"355230 Sud Mennucci";182,67;182,67
+"355240 Sumaré";92,68;92,68
+"355255 Suzanápolis";78,08;78,08
+"355250 Suzano";102,01;102,01
+"355260 Tabapuã";101,67;101,67
+"355270 Tabatinga";102,18;102,18
+"355280 Taboão da Serra";102,54;102,54
+"355290 Taciba";83,51;83,51
+"355300 Taguaí";124,67;124,67
+"355310 Taiaçu";282,91;282,91
+"355320 Taiúva";126,94;126,94
+"355330 Tambaú";105,67;105,67
+"355340 Tanabi";172,51;172,51
+"355350 Tapiraí";142,27;142,27
+"355360 Tapiratiba";150,47;150,47
+"355365 Taquaral";72,91;72,91
+"355370 Taquaritinga";148,95;148,95
+"355380 Taquarituba";91,19;91,19
+"355385 Taquarivaí";106,72;106,72
+"355390 Tarabai";126,14;126,14
+"355395 Tarumã";124,76;124,76
+"355400 Tatuí";136,95;136,95
+"355410 Taubaté";137,81;137,81
+"355420 Tejupá";169,96;169,96
+"355430 Teodoro Sampaio";121,52;121,52
+"355440 Terra Roxa";122,24;122,24
+"355450 Tietê";109,33;109,33
+"355460 Timburi";311,04;311,04
+"355465 Torre de Pedra";260,08;260,08
+"355470 Torrinha";176,44;176,44
+"355475 Trabiju";59,88;59,88
+"355480 Tremembé";99,85;99,85
+"355490 Três Fronteiras";181,00;181,00
+"355495 Tuiuti";139,77;139,77
+"355500 Tupã";177,92;177,92
+"355510 Tupi Paulista";161,85;161,85
+"355520 Turiúba";0,00;0,00
+"355530 Turmalina";217,86;217,86
+"355535 Ubarana";84,55;84,55
+"355540 Ubatuba";103,60;103,60
+"355550 Ubirajara";43,33;43,33
+"355560 Uchoa";145,15;145,15
+"355570 União Paulista";175,23;175,23
+"355580 Urânia";300,23;300,23
+"355590 Uru";164,88;164,88
+"355600 Urupês";191,12;191,12
+"355610 Valentim Gentil";88,47;88,47
+"355620 Valinhos";131,35;131,35
+"355630 Valparaíso";109,65;109,65
+"355635 Vargem";30,73;30,73
+"355640 Vargem Grande do Sul";192,33;192,33
+"355645 Vargem Grande Paulista";100,40;100,40
+"355650 Várzea Paulista";71,17;71,17
+"355660 Vera Cruz";227,19;227,19
+"355670 Vinhedo";133,59;133,59
+"355680 Viradouro";137,76;137,76
+"355690 Vista Alegre do Alto";89,72;89,72
+"355695 Vitória Brasil";170,84;170,84
+"355700 Votorantim";113,91;113,91
+"355710 Votuporanga";145,97;145,97
+"355715 Zacarias";39,71;39,71
+"350000 Município ignorado - SP";...;...
+"Total";128,42;128,42
+ Fonte:
+ Óbitos: 2000 - 2010 - Base Unificada de Óbitos - SESSP/FSEADE
+  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp A partir de 2011 - Sistema de Informações sobre Mortalidade - SIM/CCD/SESSP
+ População: Estimativas - Fundação SEADE.
+ Nota:
+ 
+ 1. Taxa de mortalidade: N.º de óbitos (feminino/masculino) por neoplasia maligna, por 100 mil habitantes (feminino/masculino).
+ 2. 2020 a 2022 - dados preliminares.
+ 3. Atualizada as bases de 2020 a 2022 - referência Março/2023. 
+ Atualizado em 14/04/2023. 

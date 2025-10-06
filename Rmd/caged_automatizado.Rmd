@@ -1,0 +1,195 @@
+---
+title: "Relatório CAGED (tabelas) automatizado"
+author: "Fábio Rocha^[Economista pela Universidade Federal de Ouro Preto] | rochaviannafj@gmail.com"
+date: "`r format(Sys.time(), '%d de %B, %Y')`"
+output: pdf_document
+---
+
+# Introdução
+
+Mensalmente, o Ministério do Trabalho divulga um relatório contendo dados sobre as movimentações no mercado de trabalho formal regido pela Consolidação das Leis do Trabalho (CLT). Estes dados estão disponíveis em dois formatos: microdados acessíveis via FTP e tabelas em formato Excel disponibilizadas diretamente no portal do Ministério.
+
+Trabalho com essas tabelas há quase dois anos e enfrentei desafios consideráveis em compreender a complexidade da formatação utilizada. As tabelas são frequentemente complicadas devido ao uso extensivo de células mescladas, o que pode prejudicar a eficiência do trabalho, especialmente para analistas iniciantes.
+
+Assim tomei a iniciativa de desenvolver um script em R que automatiza integralmente o processo de obtenção, carregamento, tratamento, visualização de dados em gráficos, geração de tabelas e criação de um relatório em formato PDF para qualquer cidade do Brasil.
+
+Embora tenha demandado um esforço considerável, o resultado me agradou. A criação deste código de automação proporcionou uma notável melhoria na minha produtividade. Aquilo que costumava me consumir cerca de 40 minutos no início, hoje é resolvido com um único clique.
+
+![Tabela CAGED](caged.jpg)
+
+
+# Pacotes necessários
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(gt)
+
+```
+
+# Download dos dados via link
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+url <- "http://pdet.mte.gov.br/images/Novo_CAGED/2024/202403/3-tabelas.xlsx"
+destino <- "D:/Projetos Externos/Spectra/3-tabelas.xlsx"
+download.file(url, destfile = destino, mode = "wb")
+
+```
+
+# Carregamento dos dados
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+caged <- read_xlsx("D:/Projetos Externos/Spectra/3-tabelas.xlsx", 
+                   sheet = "Tabela 8.1", 
+                   skip = 5)
+
+```
+
+# Alguns tratamentos
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+caged_filtrado <- caged[, 3:ncol(caged)]
+
+# Colunas que você deseja converter para numéricas
+colunas_para_converter <- 2:ncol(caged_filtrado)
+
+# Use a função lapply para converter as colunas
+caged_filtrado[colunas_para_converter] <- lapply(caged_filtrado[colunas_para_converter], as.numeric)
+
+```
+
+# Remover NA's do Dataset
+
+```{r}
+
+# Remover linhas com todos os valores NA
+caged_filtrado <- caged_filtrado %>% drop_na()
+
+```
+
+
+# Pivotagem do dataset
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+dados_pivotado <- pivot_longer(caged_filtrado, 
+                               cols = colnames(caged_filtrado)[2:ncol(caged_filtrado)], 
+                               names_to = "variavel", 
+                               values_to = "valor")
+
+```
+
+# Renomear colunas e filtragem para o município desejado
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+dados_pivotado <- dados_pivotado %>% 
+  rename(municipio = ...3)
+
+caged_regiao = dados_pivotado %>%
+  filter(municipio %in% c("Sp-Santo Andre")) # Escolha a cidade e escreva neste mesmo formato
+
+```
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+caged_regiao_final <- caged_regiao %>% 
+  slice(1:(n() - 8))
+
+```
+
+# Remoção de números da variável que contem "admissão, estoque, etc"
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+# remover numeros e pontos da variavel
+caged_regiao_final <- caged_regiao_final %>%
+  mutate(variavel = gsub("[0-9.]", "", variavel))
+
+```
+
+# Filtragem da informação "Variação Relativa (%) e criação da variável data"
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+# remoção de variação relativa
+caged_regiao_final <- caged_regiao_final %>%
+  filter(variavel != "Variação Relativa (%)")
+
+```
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+# criaçao da variavel data
+
+caged_regiao_final <- caged_regiao_final %>%
+  mutate(data = rep(seq(ymd("2020-01-01"), by = "1 month", length.out = n() / 4), each = 4))
+
+
+caged_regiao_final <- caged_regiao_final %>%
+  filter(variavel != "Estoque****\r\n(Estoque de referência de )")
+
+```
+
+# Gráfico de movimentaçoes e estoque
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE, fig.height=7, fig.width=9}
+
+# Defina uma paleta de cores
+cores <- c("blue", "red", "green", "orange", "purple")
+
+# Crie o gráfico com cores diferentes para cada gráfico e destaque o título
+grafico <- ggplot(caged_regiao_final, aes(x = data, y = valor, color = variavel)) +
+  geom_line() +
+  theme_bw() +
+  facet_wrap(~variavel, scales = "free") +
+  scale_color_manual(values = cores) +  # Atribui cores da paleta
+  labs(subtitle = "jan-2020 a ago-2023") +
+  theme(legend.position = "none")  # Ajusta a posição da legenda
+
+# Adicione um título destacado
+cidade <- caged_regiao_final[1, 1]  # Acessa o nome da cidade
+grafico + 
+  ggtitle(paste("Movimentações CAGED -", cidade), subtitle = "jan-2020 a ago-2023") +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) +
+  theme(plot.subtitle = element_text(hjust = 0.5))
+
+
+```
+
+# Tabela
+
+```{r, echo=T, eval=T,warning=FALSE, message=FALSE}
+
+tabela = tail(caged_regiao_final, 8)
+tabela = tabela[,2:4]
+
+tabela$data <- format(tabela$data, format = "%B-%Y")
+
+# Extrair as datas mínima e máxima da coluna "data"
+periodo <- paste(min(tabela$data), max(tabela$data), sep = " a ")
+
+tabela %>%
+  gt(groupname_col = "data") %>%
+  tab_header(title = md("**Movimentações CAGED**"),
+             subtitle = paste(cidade, " - (", periodo, ")")) %>%
+  tab_source_note(md("**Dados**: CAGED  | **Elaboração**: Fábio Rocha")) %>%
+  cols_label(variavel = "Movimentação/Estoque",
+             valor = "Quantidade",
+             data = "Período")
+
+
+
+
+```
+
+
+
+
+
+
